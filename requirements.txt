@@ -1,0 +1,5 @@
+joblib
+glmnet
+pycasso
+tqdm
+quadprog
