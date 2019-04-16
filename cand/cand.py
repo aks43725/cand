@@ -174,7 +174,7 @@ class GA(candidate_models):
     it = 0
     while not converge and (it <= self.maxGen):
       # Check whether all current models are infeasible
-      if np.all(pd.isnull(self.fitness)):
+      if np.unique(self.fitness).size == 1:
         raise RuntimeError('All models in generation {} are infeasible'.format(it))
       it += 1
       if verbose:
