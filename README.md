@@ -39,9 +39,9 @@ import scipy as sp
 import pandas as pd
 import cand
 
-riboflavin = pd.read_csv('data/riboflavin.csv', index_col=0).T
-y = riboflavin['q_RIBFLV']
-X = riboflavin.drop(['q_RIBFLV'], axis=1)
+ribflv = pd.read_csv('data/riboflavin.csv', index_col=0).T
+y = ribflv['q_RIBFLV']
+X = ribflv.drop(['q_RIBFLV'], axis=1)
 n, d = X.shape
 
 np.random.seed(2549)
