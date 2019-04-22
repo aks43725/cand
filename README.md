@@ -15,7 +15,7 @@ The GA has been shown to outperform the SA and the RP in several multi-model inf
 
 ### References
 
-- [1] Cheng, C.W. and Cheng, G. (2019+). "Enhancing Multi-model Inference with Natural Selection." (In preparation)
+- [1] Cheng, C.W. and Cheng, G. (2019+). "Enhancing Multi-model Inference with Natural Selection." (Under review)
 - [2] Nevo, D. and Ritov, Y. (2017), "Identifying a Minimal Class of Models for High-dimensional Data," _Journal of Machine Learning Research_, 18, 1-29.
 
 
