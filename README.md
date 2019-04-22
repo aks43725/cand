@@ -23,7 +23,7 @@ The GA has been shown to outperform the SA and the RP in several multi-model inf
 
 To install this package using command line:
 
-```
+```shell
 git clone https://github.com/aks43725/cand.git
 cd cand
 python setup.py install
@@ -33,7 +33,7 @@ python setup.py install
 ## Usage
 
 Import necessary packages and read the riboflavin dataset.
-```
+```python
 import numpy as np
 import scipy as sp
 import pandas as pd
@@ -49,13 +49,13 @@ np.random.seed(2549)
 
 Implement the GA and prepare model sizes for the SA:
 
-```
+```python
 mobj_GA = cand.GA(X, y)
 mobj_GA.fit()
 ```
 
 Implement the SA to search for good models of sizes appeared in the last GA generation:
-```
+```python
 count = np.bincount(mobj_GA.generations['model_size'][-1])
 SA_sizes = np.nonzero(count)[0]
 mobj_SA = cand.SA(X, y)
@@ -63,6 +63,6 @@ mobj_SA.fit(SA_sizes)
 ```
 
 Implement the RP:
-```
+```python
 mobj_RP = cand.union(X, y).fit()
 ```
