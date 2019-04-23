@@ -30,7 +30,7 @@ if __name__ == '__main__':
   
   # The RP:
   models_RP = cand.RP(X, y)
-  models_RP = models_RP.fit()
+  models_RP.fit()
   print('Model sizes:\n{}'.format(models_RP.models.sum(axis=1)))
   print('GIC values:\n{}'.format(cand.GIC(X, y, models_RP.models, 'PLIC', n_jobs=-1)))
 
