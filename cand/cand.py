@@ -144,7 +144,9 @@ class GA(candidate_models):
     if isinstance(init_models, np.ndarray):
       self.models = 1 * (init_models != 0)
     elif init_models == 'RP':
-      self.models = RP(self.X, self.y, None, None, 'RP').fit()
+      init_RP = RP(self.X, self.y, None, None, 'RP')
+      init_RP.fit()
+      self.models = init_RP.models
     else:
       '''
       Random initial model generation
@@ -241,7 +243,7 @@ class GA(candidate_models):
 class SA(candidate_models):
   '''
   Simulated annealing algorithm of
-    Daniel Nevo, Ya'acov Ritov (2017)
+    Daniel Nevo and Ya'acov Ritov (2017)
     "Identifying a Minimal Class of Models for High-dimensional Data"
     Journal of Machine Learning Research, 18(24):1-29
   '''
@@ -390,14 +392,14 @@ class RP(candidate_models):
     
     n, d = self.X.shape
     if self.method == 'RP':
-      models = np.array([]).reshape(0, d)
+      self.models = np.array([]).reshape(0, d)
       for penalty in ['l1', 'scad', 'mcp']:
         ncpfit = pycasso.Solver(self.X, self.y, penalty=penalty, lambdas=[200, 0.001], useintercept=True)
         ncpfit.train()
-        models = np.vstack([models, np.unique(1 * (ncpfit.coef()['beta'] != 0.0), axis=0)])
+        self.models = np.vstack([self.models, np.unique(1 * (ncpfit.coef()['beta'] != 0.0), axis=0)])
       
-      models = models[np.where(models.sum(axis=1) < n - 1)[0], :].astype('int')
-      models = np.unique(models, axis=0)
+      self.models = self.models[np.where(self.models.sum(axis=1) < n - 1)[0], :].astype('int')
+      self.models = np.unique(self.models, axis=0)
     else:
       if method == 'marcor':
         varimp = np.abs(np.corrcoef(self.y, self.X.T)[0, :][1:])
@@ -407,10 +409,8 @@ class RP(candidate_models):
       else:
         varimp = np.ones(d)
       
-      models = np.zeros((n - 2) * d).astype('int').reshape(n - 2, d)
+      self.models = np.zeros((n - 2) * d).astype('int').reshape(n - 2, d)
       order = np.argsort(varimp)[::-1]
       for k in range(models.shape[0]):
-        models[k, order[:(k + 1)]] = 1
-    
-    return models
+        self.models[k, order[:(k + 1)]] = 1
 
