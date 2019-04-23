@@ -7,7 +7,7 @@ This repository provides three methods to generate candidate models for multi-mo
 
 - The **genetic algorithm (GA)** described in [1].
 - The simulated annealing (SA) algorithm introduced in [2].
-- The union of models on regularization paths (RP) of the Lasso, SCAD and MCP.
+- The union of distinct models on the regularization paths (RPs) of the Lasso, SCAD and MCP.
 
 Specific settings of the implementation are described in [1].
 
@@ -44,25 +44,32 @@ y = ribflv['q_RIBFLV']
 X = ribflv.drop(['q_RIBFLV'], axis=1)
 n, d = X.shape
 
-np.random.seed(2549)
+np.random.seed(570)
 ```
 
 Implement the GA and prepare model sizes for the SA:
 
 ```python
-mobj_GA = cand.GA(X, y)
-mobj_GA.fit()
+models_GA = cand.GA(X, y)
+models_GA.fit()
+print('Model sizes:\n{}'.format(models_GA.models.sum(axis=1)))
+print('Fitness values:\n{}'.format(models_GA.fitness))
 ```
 
 Implement the SA to search for good models of sizes appeared in the last GA generation:
 ```python
-count = np.bincount(mobj_GA.generations['model_size'][-1])
+count = np.bincount(models_GA.generations['model_size'][-1])
 SA_sizes = np.nonzero(count)[0]
-mobj_SA = cand.SA(X, y)
-mobj_SA.fit(SA_sizes)
+models_SA = cand.SA(X, y)
+models_SA.fit(SA_sizes)
+print('Model sizes:\n{}'.format(models_SA.models.sum(axis=1)))
+print('GIC values:\n{}'.format(models_SA.ic))
 ```
 
 Implement the RP:
 ```python
-mobj_RP = cand.union(X, y).fit()
+models_RP = cand.RP(X, y)
+models_RP.fit()
+print('Model sizes:\n{}'.format(models_RP.models.sum(axis=1)))
+print('GIC values:\n{}'.format(cand.GIC(X, y, models_RP.models, 'PLIC', n_jobs=-1)))
 ```
